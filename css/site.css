@@ -1,0 +1,12 @@
+.active{
+    font-weight: bold;
+}
+
+.contact{
+    margin: 10px;
+}
+
+.contact-list{
+    height: 150px;
+    overflow: auto;
+}
