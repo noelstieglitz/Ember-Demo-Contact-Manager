@@ -1,12 +1,16 @@
+
+
 .active{
     font-weight: bold;
 }
 
-.contact{
-    margin: 10px;
+.contact-title{
+    position:fixed;
+    top:30px;
+    right:5px;
 }
-
 .contact-list{
-    height: 150px;
+    margin: 10px;
+    height: 300px;
     overflow: auto;
 }
