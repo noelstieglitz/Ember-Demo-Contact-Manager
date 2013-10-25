@@ -6,9 +6,13 @@
 /*
 Good Ember example:
  http://jsfiddle.net/dWcUp/171/
- */
+*/
 
-var App = Em.Application.create();
+var App = Em.Application.create({
+    LOG_TRANSITIONS: true,
+    LOG_VIEW_LOOKUPS: true,
+    LOG_ACTIVE_GENERATION: true
+});
 
 App.IndexRoute = Em.Route.extend({
     redirect: function() {
@@ -17,13 +21,26 @@ App.IndexRoute = Em.Route.extend({
 });
 
 //routers
+/*
+App.Router.map(function(){
+    this.resource("contacts", { path: "/" }, function() {
+        this.route("new", { path: "/new" });
+    });
+
+    this.resource("contact", { path: "/:contact_id" }, function() {
+        this.route("edit", { path: "/edit" });
+    });
+});*/
+
+
 App.Router.map(function(){ //map URLs to templates
    this.resource('contacts',{path: '/contacts'}, function(){
-       this.resource('contact', {path: ':contact_id'}, function(){
+       this.resource('contact', {path: '/:contact_id'}, function(){
            this.route('edit');
+           this.route('create');
+           this.route('delete');
        });
-   }); //maps to /#/contacts
-    //define all other URLs in application
+   });
 });
 
 App.ContactsRoute = Em.Route.extend({
@@ -31,71 +48,44 @@ App.ContactsRoute = Em.Route.extend({
         return this.store.find(App.Contact);
     }
 });
-
 App.ContactRoute = Em.Route.extend({
     model: function(params){
         return this.store.find(App.Contact, params.contact_id);
     }
 });
 
-App.EditContactRoute = Em.Route.extend({
-    model: function() {
-        return this.modelFor('contact');
-    }
+App.ContactEditRoute = Em.Route.extend({
+    model: function(params){
+        debugger;
+        return this.store.find(App.Contact, params.contact_id);
+    },
+    actions: {
+        save: function(){
+            var newContact = this.modelFor('contact.edit');
+            this.transitionTo('contact', newContact);
+        }
+    },
+    renderTemplate: function() {
+        this.render('contact.edit', { into: 'contacts' });
+}
 });
+
 
 //controllers
 App.ContactsController =  Em.ArrayController.extend();
-
 App.ContactController = Em.ObjectController.extend({
-    isEditing: false,
-
-    editContact: function () {
-        debugger;
-        this.set('isEditing', true);
-        this.transitionToRoute('edit');
-    },
-
-    deleteContact: function (something) {
-        debugger;
-        /*
-        var contact = this.get('model');
-        this.store.deleteRecord(App.Contact, contact);
-        this.get('store').deleteRecord(App.Contact.find(1));
-        */
-        this.transitionToRoute('contacts');
-    }
-});
-
-
-
-//views
-App.EditContactView = Em.TextField.extend({
-    classNames: ['edit'],
-
-    valueBinding: 'todo.title',
-
-    change: function () {
-        var value = this.get('value');
-
-        if (Em.isEmpty(value)) {
-            this.get('controller').removeContact();
+    actions: {
+        //TODO - we can get rid of these
+        editContact: function (model) {
+            debugger;
+            this.transitionToRoute('contact.edit', model.id);
+        } ,
+        deleteContact: function (model) {
+            //this.store.removeItem(model.contact_id);
+            this.transitionToRoute('contacts');
         }
-    },
-
-    focusOut: function () {
-        this.set('controller.isEditing', false);
-    },
-
-    insertNewline: function () {
-        this.set('controller.isEditing', false);
-    },
-
-    didInsertElement: function () {
-        this.$().focus();
     }
 });
-
 
 //models
 //setup the store.  we are using the fixture adapter for testing
@@ -123,7 +113,7 @@ App.Contact.FIXTURES = [
   {
     id: 1,
     firstName: 'Paul',
-    lastName: 'McCarney',
+    lastName: 'McCartney',
     email: 'pDiddy43234@contoso.com',
     phone: '555-232-1111'
 },{

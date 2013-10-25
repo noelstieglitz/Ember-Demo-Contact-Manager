@@ -8,42 +8,48 @@
     <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
+<!--This is generated automatically
 <script type="text/x-handlebars" data-template-name="application" >
     <p>{{ outlet }}</p>
 </script>
-
+-->
 <script type="text/x-handlebars" data-template-name="contacts">
     <div class="page-header">
         <h1>{{#link-to "contacts"}}Ember Contact Manager{{/link-to}}</h1>
     </div>
     <div class="row">
-    <div class="col-md-2 contact-list">
-        <p class="contact-title">Total Contacts <span class="badge">{{ App.Contact.FIXTURES.length }}</span></p>
-
-        <dl>
-        {{#each contact in controller}}
-        <dl class="well">
-            <dt>
-            {{#link-to "contact" contact}}{{ contact.fullName }}{{/link-to}}
-            </dt>
-            <dd>
-            <span class="glyphicon glyphicon-envelope"> {{ contact.email }} </span>
-                <br/>
-            <span class="glyphicon glyphicon-earphone"> {{ contact.phone }} </span>
-            </dd>
-        </dl>
-        {{/each}}
-        </dl>
-    </div>
-    <div class="col-md-4">
-    {{outlet}}
-    </div>
+        <div class="col-md-2 contact-list">
+            <p class="contact-title">Total Contacts <span class="badge">{{ controller.contactCount }}</span></p>
+            <dl>
+            {{#each contact in controller}}
+            <dl class="well">
+                <dt>
+                {{#link-to "contact" contact}}{{ contact.fullName }}{{/link-to}}
+                </dt>
+                <dd>
+                <span class="glyphicon glyphicon-envelope"> {{ contact.email }} </span>
+                    <br/>
+                <span class="glyphicon glyphicon-earphone"> {{ contact.phone }} </span>
+                </dd>
+            </dl>
+            {{/each}}
+            </dl>
+        </div>
+        <div class="col-md-4">
+        {{outlet}}
+        </div>
     </div>
 </script>
+
+<script type="text/x-handlebars" data-template-name="contacts/index">
+    <!--This template is rendered when no item has been selected-->
+    <h3>Select a contact to view/edit details.</h3>
+</script>
+<script type="text/x-handlebars" data-template-name="contact/index">
+    {{outlet}}
+</script>
+
 <script type="text/x-handlebars" data-template-name="contact">
-    {{#if isEditing}}
-    TODO
-    {{else}}
     <div class="well contact">
         <h3>{{ firstName }} {{ lastName }}</h3>
         <h4>Contact Details</h4>
@@ -52,20 +58,47 @@
         <span class="glyphicon glyphicon-earphone"> {{ phone }} </span>
         <br/>
         <br/>
-        <button type="button" {{action 'editContact' this}}  class='btn btn-primary' >Edit</button>
-        <button {{action "deleteContact"}} class="btn btn-danger btn-mini">Delete</button>
+        {{#link-to "contact.edit" this}}edit{{/link-to}}
+        <button {{action "editContact" this}} class="btn btn-danger btn-xs">Edit</button>
+        <button {{action "deleteContact" this}} class="btn btn-danger btn-xs">Delete</button>
     </div>
-    {{/if}}
 </script>
-<script type="text/x-handlebars" data-template-name="contacts/index">
-    <!--This template is rendered when no item has been selected-->
-    <h3>Select a contact to view/edit details.</h3>
+<script type="text/x-handlebars" data-template-name="contact/edit">
+    <div class="well contact">
+    <form class="form-inline" {{action save on="submit"}}>
+    <label>
+        First Name
+        {{input type="text" value=firstName}}
+    </label>
+    <br/>
+
+    <label>
+        Last Name
+        {{input type="text" value=lastName}}
+    </label>
+    <br/>
+
+    <label>
+         <span class="glyphicon glyphicon-envelope"></span>
+        {{input type="text" value=email}}
+    </label>
+    <br/>
+
+    <label>
+        <span class="glyphicon glyphicon-earphone"></span>
+        {{input type="text" value=phone}}
+    </label>
+    <br/>
+    <button type="submit" class="btn btn-primary btn-xs">Save</button>
+    </form>
+    </div>
 </script>
+
 
 <script src="js/lib/jquery-1.9.1.js"></script>
 <script src="js/lib/bootstrap.js"></script>
 <script src="js/lib/handlebars-1.0.0.js"></script>
-<script src="js/lib/ember-1.0.0.js"></script>
+<script src="js/lib/ember-1.1.1.js"></script>
 <script src="js/lib/ember-data.js"></script>
 <script src="js/app.js"></script>
 </body>
