@@ -7,7 +7,14 @@
 
 /*
 Good Ember example:
- http://jsfiddle.net/dWcUp/171/
+ Nested routes: http://jsfiddle.net/dWcUp/171/
+ CRUD Example: http://www.embersherpa.com/articles/crud-example-app-without-ember-data/
+
+ Great blog example vid (source code in links) https://www.youtube.com/watch?v=Ga99hMi7wfY
+
+Helpful websites:
+ http://www.embersherpa.com/
+
 */
 
 var App = Em.Application.create({
@@ -34,7 +41,7 @@ App.Router.map(function(){ //map URLs to templates
 
 App.ContactsRoute = Em.Route.extend({
     model: function(){
-        return this.store.find(App.Contact);
+        return this.store.findAll(App.Contact);
     },
     actions: {
         //TODO - this should go on the ContactsContactEdit controller
@@ -55,14 +62,10 @@ App.ContactsRoute = Em.Route.extend({
 
 App.ContactsIndexRoute = Em.Route.extend({
     model: function(){
-        return this.store.find(App.Contact);
+        return this.store.findAll(App.Contact);
     },
     actions: {
         createContact: function(){
-            debugger;
-
-            //var contact = App.Contact.create({id: App.Contact.FIXTURES.length});
-
             var contact = this.store.createRecord('contact', {id: App.Contact.FIXTURES.length});
             this.transitionTo('contacts.contactEdit', contact);
         }
@@ -75,18 +78,11 @@ App.ContactRoute = Em.Route.extend({
     }
 });
 
-App.ContactEditRoute = Em.Route.extend({
-    model: function(params){
-        return this.store.find(App.Contact, params.contact_id);
-    }
-});
-
 //controllers
 App.ContactController = Em.ObjectController.extend({
     actions: {
         //TODO - can get rid of these
         editContact: function (params) {
-            debugger;
             var model = this.store.find(App.Contact, params.id);
             this.transitionToRoute('contacts.contactEdit', model);
         } ,
@@ -97,7 +93,6 @@ App.ContactController = Em.ObjectController.extend({
     },
     needs: "contact"
 });
-
 
 //models
 //setup the store.  we are using the fixture adapter for testing
