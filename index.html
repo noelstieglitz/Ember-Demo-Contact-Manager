@@ -49,7 +49,6 @@
 </script>
 
 <script type="text/x-handlebars" data-template-name="contact">
-    {{controller}}
     <div class="well contact">
         <h3>{{ firstName }} {{ lastName }}</h3>
         <h4>Contact Details</h4>
@@ -58,41 +57,36 @@
         <span class="glyphicon glyphicon-earphone"> {{ phone }} </span>
         <br/>
         <br/>
-        <button {{action delete this}} class="btn btn-danger pull-right">Delete</button>
-
-        <button {{action edit this}} class="btn btn-default pull-right">Edit</button>
+        <button {{action edit this}} class="btn btn-default ">Edit</button>
+        <button {{action delete this}} class="btn btn-danger ">Delete</button>
         <br/>
     </div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/edit">
-    {{ controller }}
     <div class="well contact">
-    <form class="form-inline" {{action save this on="submit"}}>
-    <label>
-        First Name
-        {{input type="text" value=firstName}}
-    </label>
-    <br/>
-
-    <label>
-        Last Name
-        {{input type="text" value=lastName}}
-    </label>
-    <br/>
-
-    <label>
-         <span class="glyphicon glyphicon-envelope"></span>
-        {{input type="text" value=email}}
-    </label>
-    <br/>
-
-    <label>
-        <span class="glyphicon glyphicon-earphone"></span>
-        {{input type="text" value=phone}}
-    </label>
-    <br/>
-    <button type="submit" class="pull-right btn btn-default">Save</button>
-        <br/>
+    <form role="form" class="form-horizontal" {{action save this on="submit"}}>
+    <fieldset>
+        <div class="form-group">
+            <label >First</label>
+            {{input class="contact-input" id="firstName" value=firstName}}
+        </div>
+        <div class="form-group">
+            <label >Last</label>
+            {{input class="contact-input" id="lastName" value=lastName}}
+        </div>
+        <div class="form-group">
+            <label >Email</label>
+            {{input class="contact-input" type="text" value=email}}
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            {{input class="contact-input" type="text" value=phone}}
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+    </fieldset>
+    </div>
     </form>
     </div>
 </script>

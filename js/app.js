@@ -45,7 +45,8 @@ App.ContactsRoute = Em.Route.extend({
     },
     actions: {
         createContact: function(){
-            var contact = this.store.createRecord('contact', {id: App.Contact.FIXTURES.length});
+            var nextId = parseInt(App.Contact.FIXTURES.sort(function(a,b) { return parseInt(a.id) > parseInt(b.id); })[App.Contact.FIXTURES.length-1].id) + 1;
+            var contact = this.store.createRecord('contact', {id: nextId});
             this.transitionTo('contacts.edit', contact);
         }
     }
@@ -67,8 +68,12 @@ App.ContactController = Em.ObjectController.extend({
         },
         delete: function(model){
             if(confirm('Are you sure?')){
+                this.get('model').deleteRecord();
+                this.get('model').save();
+                /*
                 model.deleteRecord(App.Contact);
                 model.save();
+                */
                 this.transitionTo('contacts');
             }
         }
@@ -98,9 +103,7 @@ App.Contact = DS.Model.extend({
     phone: DS.attr('string'),
     email: DS.attr('string'),
     fullName: function(){
-        var fName = this.get('firstName');
-        var lName = this.get('lastName');
-        return lName + ', ' + fName;
+        return this.get('lastName') + ', ' + this.get('firstName');
     }.property('firstName', 'lastName')//computed property
 });
 

@@ -13,3 +13,7 @@
     height: 100%;
     overflow-y:auto;
 }
+
+.contact-input{
+    width: 100%;
+}
