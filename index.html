@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-<!--This is generated automatically
 <script type="text/x-handlebars" data-template-name="application" >
     <p>{{ outlet }}</p>
 </script>
--->
 <script type="text/x-handlebars" data-template-name="contacts">
     <div class="page-header">
         <h1>{{#link-to "contacts"}}Ember Contact Manager{{/link-to}}</h1>
@@ -44,6 +42,7 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
     <!--This template is rendered when no item has been selected-->
     <h3>Select a contact to view/edit details.</h3>
+    <button {{action "createContact"}}>Add Contact</button>
 </script>
 <script type="text/x-handlebars" data-template-name="contact/index">
     {{outlet}}
@@ -58,14 +57,15 @@
         <span class="glyphicon glyphicon-earphone"> {{ phone }} </span>
         <br/>
         <br/>
-        {{#link-to "contact.edit" this}}edit{{/link-to}}
+        {{#link-to "contacts.contactEdit" controllers.contact.content }}edit{{/link-to}}
         <button {{action "editContact" this}} class="btn btn-danger btn-xs">Edit</button>
-        <button {{action "deleteContact" this}} class="btn btn-danger btn-xs">Delete</button>
+        <button {{action delete this}} class="btn btn-danger btn-xs">Delete</button>
     </div>
 </script>
-<script type="text/x-handlebars" data-template-name="contact/edit">
+<script type="text/x-handlebars" data-template-name="contacts/contactEdit">
+    {{ controller }}
     <div class="well contact">
-    <form class="form-inline" {{action save on="submit"}}>
+    <form class="form-inline" {{action save this on="submit"}}>
     <label>
         First Name
         {{input type="text" value=firstName}}
@@ -98,7 +98,7 @@
 <script src="js/lib/jquery-1.9.1.js"></script>
 <script src="js/lib/bootstrap.js"></script>
 <script src="js/lib/handlebars-1.0.0.js"></script>
-<script src="js/lib/ember-1.1.1.js"></script>
+<script src="js/lib/ember-1.1.2.js"></script>
 <script src="js/lib/ember-data.js"></script>
 <script src="js/app.js"></script>
 </body>

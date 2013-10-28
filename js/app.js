@@ -2,6 +2,8 @@
 /*global Em */
 /*global DS */
 /*global console */
+/*global Handlebars */
+/*global confirm */
 
 /*
 Good Ember example:
@@ -10,8 +12,10 @@ Good Ember example:
 
 var App = Em.Application.create({
     LOG_TRANSITIONS: true,
-    LOG_VIEW_LOOKUPS: true,
-    LOG_ACTIVE_GENERATION: true
+    LOG_VIEW_LOOKUPS: true//,
+    //LOG_ACTIVE_GENERATION: true,
+    //LOG_TRANSITIONS_INTERNAL: true,
+    //LOG_BINDINGS: true
 });
 
 App.IndexRoute = Em.Route.extend({
@@ -21,33 +25,49 @@ App.IndexRoute = Em.Route.extend({
 });
 
 //routers
-/*
-App.Router.map(function(){
-    this.resource("contacts", { path: "/" }, function() {
-        this.route("new", { path: "/new" });
-    });
-
-    this.resource("contact", { path: "/:contact_id" }, function() {
-        this.route("edit", { path: "/edit" });
-    });
-});*/
-
-
 App.Router.map(function(){ //map URLs to templates
    this.resource('contacts',{path: '/contacts'}, function(){
-       this.resource('contact', {path: '/:contact_id'}, function(){
-           this.route('edit');
-           this.route('create');
-           this.route('delete');
-       });
+       this.resource('contact', {path: 'contact/:contact_id'});
+       this.route('contactEdit', {path: 'contact/:contact_id/edit'});
    });
 });
 
 App.ContactsRoute = Em.Route.extend({
     model: function(){
         return this.store.find(App.Contact);
+    },
+    actions: {
+        //TODO - this should go on the ContactsContactEdit controller
+        save: function(){
+            var contact = this.modelFor('contacts.contactEdit');
+            this.transitionTo('contact', contact);
+        },
+        delete: function(model){
+            if(confirm('Are you sure?')){
+            model.deleteRecord(App.Contact);
+            model.save();
+            this.transitionTo('contacts');
+            }
+        }
     }
 });
+
+App.ContactsIndexRoute = Em.Route.extend({
+    model: function(){
+        return this.store.find(App.Contact);
+    },
+    actions: {
+        createContact: function(){
+            debugger;
+
+            //var contact = App.Contact.create({id: App.Contact.FIXTURES.length});
+
+            var contact = this.store.createRecord('contact', {id: App.Contact.FIXTURES.length});
+            this.transitionTo('contacts.contactEdit', contact);
+        }
+    }
+});
+
 App.ContactRoute = Em.Route.extend({
     model: function(params){
         return this.store.find(App.Contact, params.contact_id);
@@ -56,36 +76,27 @@ App.ContactRoute = Em.Route.extend({
 
 App.ContactEditRoute = Em.Route.extend({
     model: function(params){
-        debugger;
         return this.store.find(App.Contact, params.contact_id);
-    },
-    actions: {
-        save: function(){
-            var newContact = this.modelFor('contact.edit');
-            this.transitionTo('contact', newContact);
-        }
-    },
-    renderTemplate: function() {
-        this.render('contact.edit', { into: 'contacts' });
-}
+    }
 });
 
-
 //controllers
-App.ContactsController =  Em.ArrayController.extend();
 App.ContactController = Em.ObjectController.extend({
     actions: {
-        //TODO - we can get rid of these
-        editContact: function (model) {
+        //TODO - can get rid of these
+        editContact: function (params) {
             debugger;
-            this.transitionToRoute('contact.edit', model.id);
+            var model = this.store.find(App.Contact, params.id);
+            this.transitionToRoute('contacts.contactEdit', model);
         } ,
         deleteContact: function (model) {
             //this.store.removeItem(model.contact_id);
             this.transitionToRoute('contacts');
         }
-    }
+    },
+    needs: "contact"
 });
+
 
 //models
 //setup the store.  we are using the fixture adapter for testing
@@ -111,26 +122,26 @@ App.Contact = DS.Model.extend({
 //fixture data
 App.Contact.FIXTURES = [
   {
-    id: 1,
+    id: 0,
     firstName: 'Paul',
     lastName: 'McCartney',
     email: 'pDiddy43234@contoso.com',
     phone: '555-232-1111'
 },{
-    id: 2,
+    id: 1,
     firstName: 'John',
     lastName: 'Lennon',
     email: 'biggerThanJesus@contoso.com',
     phone: '555-232-2222'
 
     },{
-    id: 3,
+    id: 2,
     firstName: 'Ringo',
     lastName: 'Starr',
     email: 'starr@contoso.com',
     phone: '555-232-3333'
     },{
-    id: 4,
+    id: 3,
     firstName: 'George',
     lastName: 'Harrison',
     email: 'george@contoso.com',
