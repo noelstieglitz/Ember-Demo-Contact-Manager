@@ -68,12 +68,7 @@ App.ContactController = Em.ObjectController.extend({
         },
         delete: function(model){
             if(confirm('Are you sure?')){
-                this.get('model').deleteRecord();
-                this.get('model').save();
-                /*
                 model.deleteRecord(App.Contact);
-                model.save();
-                */
                 this.transitionTo('contacts');
             }
         }
