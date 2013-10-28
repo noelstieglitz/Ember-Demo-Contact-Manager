@@ -32,10 +32,10 @@ App.IndexRoute = Em.Route.extend({
 });
 
 //routers
-App.Router.map(function(){ //map URLs to templates
+App.Router.map(function(){ //map URLs to controllers/templates
    this.resource('contacts',{path: '/contacts'}, function(){
        this.resource('contact', {path: 'contact/:contact_id'});
-       this.route('contactEdit', {path: 'contact/:contact_id/edit'});
+       this.route('edit', {path: 'contact/:contact_id/edit'});
    });
 });
 
@@ -44,30 +44,9 @@ App.ContactsRoute = Em.Route.extend({
         return this.store.findAll(App.Contact);
     },
     actions: {
-        //TODO - this should go on the ContactsContactEdit controller
-        save: function(){
-            var contact = this.modelFor('contacts.contactEdit');
-            contact.save();
-            this.transitionTo('contact', contact);
-        },
-        delete: function(model){
-            if(confirm('Are you sure?')){
-            model.deleteRecord(App.Contact);
-            model.save();
-            this.transitionTo('contacts');
-            }
-        }
-    }
-});
-
-App.ContactsIndexRoute = Em.Route.extend({
-    model: function(){
-        return this.store.findAll(App.Contact);
-    },
-    actions: {
         createContact: function(){
             var contact = this.store.createRecord('contact', {id: App.Contact.FIXTURES.length});
-            this.transitionTo('contacts.contactEdit', contact);
+            this.transitionTo('contacts.edit', contact);
         }
     }
 });
@@ -80,18 +59,28 @@ App.ContactRoute = Em.Route.extend({
 
 //controllers
 App.ContactController = Em.ObjectController.extend({
+    needs: "contact",
     actions: {
-        //TODO - can get rid of these
-        editContact: function (params) {
+        edit: function (params) {
             var model = this.store.find(App.Contact, params.id);
-            this.transitionToRoute('contacts.contactEdit', model);
-        } ,
-        deleteContact: function (model) {
-            //this.store.removeItem(model.contact_id);
-            this.transitionToRoute('contacts');
+            this.transitionToRoute('contacts.edit', model);
+        },
+        delete: function(model){
+            if(confirm('Are you sure?')){
+                model.deleteRecord(App.Contact);
+                model.save();
+                this.transitionTo('contacts');
+            }
         }
-    },
-    needs: "contact"
+    }
+});
+App.ContactsEditController = Em.ObjectController.extend({
+    actions:{
+        save: function(){
+
+            this.transitionTo('contact', this.model);
+        }
+    }
 });
 
 //models

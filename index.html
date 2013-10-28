@@ -18,6 +18,7 @@
     <div class="row">
         <div class="col-md-2 contact-list">
             <p class="contact-title">Total Contacts <span class="badge">{{ controller.length }}</span></p>
+            <button class="btn" {{action "createContact"}}>+ New Contact</button>
             <dl>
             {{#each contact in controller}}
             <dl class="well">
@@ -42,13 +43,13 @@
 <script type="text/x-handlebars" data-template-name="contacts/index">
     <!--This template is rendered when no item has been selected-->
     <h3>Select a contact to view/edit details.</h3>
-    <button {{action "createContact"}}>Add Contact</button>
 </script>
 <script type="text/x-handlebars" data-template-name="contact/index">
     {{outlet}}
 </script>
 
 <script type="text/x-handlebars" data-template-name="contact">
+    {{controller}}
     <div class="well contact">
         <h3>{{ firstName }} {{ lastName }}</h3>
         <h4>Contact Details</h4>
@@ -57,12 +58,13 @@
         <span class="glyphicon glyphicon-earphone"> {{ phone }} </span>
         <br/>
         <br/>
-        {{#link-to "contacts.contactEdit" controllers.contact.content }}edit{{/link-to}}
-        <button {{action "editContact" this}} class="btn btn-danger btn-xs">Edit</button>
-        <button {{action delete this}} class="btn btn-danger btn-xs">Delete</button>
+        <button {{action delete this}} class="btn btn-danger pull-right">Delete</button>
+
+        <button {{action edit this}} class="btn btn-default pull-right">Edit</button>
+        <br/>
     </div>
 </script>
-<script type="text/x-handlebars" data-template-name="contacts/contactEdit">
+<script type="text/x-handlebars" data-template-name="contacts/edit">
     {{ controller }}
     <div class="well contact">
     <form class="form-inline" {{action save this on="submit"}}>
@@ -89,7 +91,8 @@
         {{input type="text" value=phone}}
     </label>
     <br/>
-    <button type="submit" class="btn btn-primary btn-xs">Save</button>
+    <button type="submit" class="pull-right btn btn-default">Save</button>
+        <br/>
     </form>
     </div>
 </script>
