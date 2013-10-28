@@ -40,6 +40,7 @@ App.ContactsRoute = Em.Route.extend({
         //TODO - this should go on the ContactsContactEdit controller
         save: function(){
             var contact = this.modelFor('contacts.contactEdit');
+            contact.save();
             this.transitionTo('contact', contact);
         },
         delete: function(model){
