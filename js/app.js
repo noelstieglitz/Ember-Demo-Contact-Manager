@@ -24,16 +24,16 @@ var App = Em.Application.create({
     //LOG_TRANSITIONS_INTERNAL: true,
     //LOG_BINDINGS: true
 });
-
+/*
 App.IndexRoute = Em.Route.extend({
     redirect: function() {
         this.transitionTo('contacts'); //use the transitionTo method to automatically start at the contacts route
     }
-});
+});*/
 
 //routers
 App.Router.map(function(){ //map URLs to controllers/templates
-   this.resource('contacts',{path: '/contacts'}, function(){
+   this.resource('contacts',{path: '/'}, function(){
        this.resource('contact', {path: 'contact/:contact_id'});
        this.route('edit', {path: 'contact/:contact_id/edit'});
    });
@@ -72,7 +72,16 @@ App.ContactController = Em.ObjectController.extend({
                 this.transitionTo('contacts');
             }
         }
-    }
+    },
+    formattedDate: function() {
+        var date = this.get('birthDate');
+
+        if(date)
+            return moment(date).format('LL');
+
+        return null;
+
+    }.property('birthDate')
 });
 App.ContactsEditController = Em.ObjectController.extend({
     actions:{
@@ -81,6 +90,10 @@ App.ContactsEditController = Em.ObjectController.extend({
             this.transitionTo('contact', this.model);
         }
     }
+});
+
+App.ContactsController = Em.ArrayController.extend({
+    sortProperties: ['fullName']
 });
 
 //models
@@ -97,6 +110,7 @@ App.Contact = DS.Model.extend({
     lastName: DS.attr('string'),
     phone: DS.attr('string'),
     email: DS.attr('string'),
+    birthDate: DS.attr('date', {defaultValue: null}),
     fullName: function(){
         return this.get('lastName') + ', ' + this.get('firstName');
     }.property('firstName', 'lastName')//computed property
@@ -109,26 +123,30 @@ App.Contact.FIXTURES = [
     firstName: 'Paul',
     lastName: 'McCartney',
     email: 'pDiddy43234@contoso.com',
-    phone: '555-232-1111'
+    phone: '555-232-1111',
+    birthDate: new Date(1940, 10, 9)
 },{
     id: 1,
     firstName: 'John',
     lastName: 'Lennon',
     email: 'biggerThanJesus@contoso.com',
-    phone: '555-232-2222'
+    phone: '555-232-2222',
+    birthDate: new Date(1941, 10, 9)
 
     },{
     id: 2,
     firstName: 'Ringo',
     lastName: 'Starr',
     email: 'starr@contoso.com',
-    phone: '555-232-3333'
+    phone: '555-232-3333',
+    birthDate: new Date(1942, 10, 9)
     },{
     id: 3,
     firstName: 'George',
     lastName: 'Harrison',
     email: 'george@contoso.com',
-    phone: '555-232-4444'
+    phone: '555-232-4444',
+    birthDate: new Date(1943, 10, 9)
     }
 ];
 

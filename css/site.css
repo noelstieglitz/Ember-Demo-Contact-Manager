@@ -8,7 +8,7 @@
     right:5px;
 }
 .contact-list{
-    margin: 10px;
+    margin-left: 10px;
     overflow: auto;
     height: 100%;
     overflow-y:auto;
@@ -16,4 +16,8 @@
 
 .contact-input{
     width: 100%;
+}
+
+body{
+    margin: 10px;
 }

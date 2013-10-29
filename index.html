@@ -16,7 +16,7 @@
         <h1>{{#link-to "contacts"}}Ember Contact Manager{{/link-to}}</h1>
     </div>
     <div class="row">
-        <div class="col-md-2 contact-list">
+        <div class="col-md-3 contact-list">
             <p class="contact-title">Total Contacts <span class="badge">{{ controller.length }}</span></p>
             <button class="btn" {{action "createContact"}}>+ New Contact</button>
             <dl>
@@ -34,7 +34,7 @@
             {{/each}}
             </dl>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
         {{outlet}}
         </div>
     </div>
@@ -55,6 +55,8 @@
         <span class="glyphicon glyphicon-envelope"> {{ email }} </span>
         <br/>
         <span class="glyphicon glyphicon-earphone"> {{ phone }} </span>
+        <br/>
+        <span class="glyphicon glyphicon-calendar"> {{ formattedDate }} </span>
         <br/>
         <br/>
         <button {{action edit this}} class="btn btn-default ">Edit</button>
@@ -83,6 +85,10 @@
             {{input class="contact-input" type="text" value=phone}}
         </div>
         <div class="form-group">
+            <label>Birth Date</label>
+            {{input class="contact-input" type="text" value=birthDate }}
+        </div>
+        <div class="form-group">
             <button type="submit" class="btn btn-default">Save</button>
         </div>
     </fieldset>
@@ -93,6 +99,7 @@
 
 
 <script src="js/lib/jquery-1.9.1.js"></script>
+<script src="js/lib/moment.min.js"></script>
 <script src="js/lib/bootstrap.js"></script>
 <script src="js/lib/handlebars-1.0.0.js"></script>
 <script src="js/lib/ember-1.1.2.js"></script>
