@@ -18,18 +18,12 @@ Helpful websites:
 */
 
 var App = Em.Application.create({
-    LOG_TRANSITIONS: true,
-    LOG_VIEW_LOOKUPS: true//,
+    LOG_TRANSITIONS: true//,
+    //LOG_VIEW_LOOKUPS: true,
     //LOG_ACTIVE_GENERATION: true,
     //LOG_TRANSITIONS_INTERNAL: true,
     //LOG_BINDINGS: true
 });
-/*
-App.IndexRoute = Em.Route.extend({
-    redirect: function() {
-        this.transitionTo('contacts'); //use the transitionTo method to automatically start at the contacts route
-    }
-});*/
 
 //routers
 App.Router.map(function(){ //map URLs to controllers/templates
@@ -39,6 +33,7 @@ App.Router.map(function(){ //map URLs to controllers/templates
    });
 });
 
+//define routes
 App.ContactsRoute = Em.Route.extend({
     model: function(){
         return this.store.findAll(App.Contact);
@@ -51,12 +46,19 @@ App.ContactsRoute = Em.Route.extend({
         }
     }
 });
-
+/*
 App.ContactRoute = Em.Route.extend({
     model: function(params){
         return this.store.find(App.Contact, params.contact_id);
     }
 });
+
+App.ContactsEditRoute = Em.Route.extend({
+    model: function(params){
+        return this.store.find(App.Contact, params.contact_id);
+    }
+});
+*/
 
 //controllers
 App.ContactController = Em.ObjectController.extend({
@@ -69,7 +71,7 @@ App.ContactController = Em.ObjectController.extend({
         delete: function(model){
             if(confirm('Are you sure?')){
                 model.deleteRecord(App.Contact);
-                this.transitionTo('contacts');
+                this.transitionToRoute('contacts');
             }
         }
     },
@@ -77,7 +79,7 @@ App.ContactController = Em.ObjectController.extend({
         var date = this.get('birthDate');
 
         if(date)
-            return moment(date).format('LL');
+            return moment(date).format('MM-DD-YYYY');
 
         return null;
 
@@ -87,7 +89,7 @@ App.ContactsEditController = Em.ObjectController.extend({
     actions:{
         save: function(){
 
-            this.transitionTo('contact', this.model);
+            this.transitionToRoute('contact', this.model);
         }
     }
 });
