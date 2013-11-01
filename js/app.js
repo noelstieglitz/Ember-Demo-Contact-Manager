@@ -64,8 +64,7 @@ App.ContactController = Em.ObjectController.extend({
     needs: "contact",
     actions: {
         edit: function (params) {
-            var model = this.store.find(App.Contact, params.id);
-            this.transitionToRoute('contacts.edit', model);
+            this.transitionToRoute('contacts.edit', params);
         },
         delete: function(model){
             if(confirm('Are you sure?')){
@@ -88,10 +87,8 @@ App.ContactController = Em.ObjectController.extend({
 App.ContactsNewController = Em.ObjectController.extend({
     actions:{
         save: function(){
-            var nextId = parseInt(App.Contact.FIXTURES.sort(function(a,b) { return parseInt(a.id) > parseInt(b.id); })[App.Contact.FIXTURES.length-1].id) + 1;
             var contact = this.store.createRecord('contact',
                 {
-                    id: nextId,
                     firstName: this.get('firstName'),
                     lastName: this.get('lastName'),
                     email: this.get('email'),
@@ -110,14 +107,17 @@ App.ContactsController = Em.ArrayController.extend({
 App.ContactsEditController = Em.ObjectController.extend({
     actions:{
         save: function(){
+            this.get('model').save();
             this.transitionToRoute('contact', this.model);
         }
     }
 });
 //models
+
 //setup the store.  we are using the fixture adapter for testing
 //other options exist, including the RESTAdapter
 App.ApplicationAdapter = DS.FixtureAdapter.extend();
+
 /*
 App.Store = DS.Store.extend({
     adapter: DS.FixtureAdapter.create()
