@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-md-3 contact-list">
             <p class="contact-title">Total Contacts <span class="badge">{{ controller.length }}</span></p>
-            <button class="btn" {{action "createContact"}}>+ New Contact</button>
+            <br/>{{#link-to "contacts.new"}}+ New Contact{{/link-to}}
             <dl>
             {{#each contact in controller}}
             <dl class="well">
@@ -59,38 +59,43 @@
     </div>
 </script>
 <script type="text/x-handlebars" data-template-name="contacts/edit">
+    {{partial contact}}
+</script>
+<script type="text/x-handlebars" data-template-name="contacts/new">
+    {{partial contact}}
+</script>
+<script type="text/x-handlebars" data-template-name="_contact">
     <div class="well contact">
-    <form role="form" class="form-horizontal" {{action save this on="submit"}}>
-    <fieldset>
-        <div class="form-group">
-            <label >First</label>
-            {{input class="contact-input" id="firstName" value=firstName}}
-        </div>
-        <div class="form-group">
-            <label >Last</label>
-            {{input class="contact-input" id="lastName" value=lastName}}
-        </div>
-        <div class="form-group">
-            <label >Email</label>
-            {{input class="contact-input" type="text" value=email}}
-        </div>
-        <div class="form-group">
-            <label>Phone</label>
-            {{input class="contact-input" type="text" value=phone}}
-        </div>
-        <div class="form-group">
-            <label>Birth Date</label><br/>
-            {{input class="contact-input" type="text" value=birthDate}}
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-default">Save</button>
-        </div>
-    </fieldset>
+        <form role="form" class="form-horizontal" {{action save this on="submit"}}>
+        <fieldset>
+            <div class="form-group">
+                <label >First</label>
+                {{input class="contact-input" id="firstName" value=firstName}}
+            </div>
+            <div class="form-group">
+                <label >Last</label>
+                {{input class="contact-input" id="lastName" value=lastName}}
+            </div>
+            <div class="form-group">
+                <label >Email</label>
+                {{input class="contact-input" type="text" value=email}}
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                {{input class="contact-input" type="text" value=phone}}
+            </div>
+            <div class="form-group">
+                <label>Birth Date</label><br/>
+                {{input class="contact-input" type="text" value=birthDate}}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Save</button>
+            </div>
+        </fieldset>
     </div>
     </form>
     </div>
 </script>
-
 
 <script src="js/libs/jquery-1.9.1.js"></script>
 <script src="js/libs/moment.min.js"></script>

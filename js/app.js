@@ -30,6 +30,7 @@ App.Router.map(function(){ //map URLs to controllers/templates
    this.resource('contacts',{path: '/'}, function(){
        this.resource('contact', {path: 'contact/:contact_id'});
        this.route('edit', {path: 'contact/:contact_id/edit'});
+       this.route('new', {path: 'contact/new'});
    });
 });
 
@@ -37,13 +38,6 @@ App.Router.map(function(){ //map URLs to controllers/templates
 App.ContactsRoute = Em.Route.extend({
     model: function(){
         return this.store.findAll(App.Contact);
-    },
-    actions: {
-        createContact: function(){
-            var nextId = parseInt(App.Contact.FIXTURES.sort(function(a,b) { return parseInt(a.id) > parseInt(b.id); })[App.Contact.FIXTURES.length-1].id) + 1;
-            var contact = this.store.createRecord('contact', {id: nextId});
-            this.transitionTo('contacts.edit', contact);
-        }
     }
 });
 /*
@@ -85,13 +79,18 @@ App.ContactController = Em.ObjectController.extend({
 
     }.property('birthDate')
 });
-App.ContactsEditController = Em.ObjectController.extend({
+
+App.ContactsNewController = Em.ObjectController.extend({
     actions:{
         save: function(){
-
-            this.transitionToRoute('contact', this.model);
+            debugger;
+            var nextId = parseInt(App.Contact.FIXTURES.sort(function(a,b) { return parseInt(a.id) > parseInt(b.id); })[App.Contact.FIXTURES.length-1].id) + 1;
+            var contact = this.store.createRecord('contact', {id: nextId, firstName: this.get('firstName')});
+            this.transitionToRoute('contact', contact);
         }
-    }
+    },
+    firstName: '',
+    id: 0
 });
 
 App.ContactsController = Em.ArrayController.extend({
