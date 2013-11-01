@@ -53,6 +53,11 @@ App.ContactsEditRoute = Em.Route.extend({
     }
 });
 */
+App.ContactsNewRoute = Em.Route.extend({
+    model: function(){
+        return {id: 0, firstName: '', lastName: '', email: '', phone:'', birthDate:''};
+    }
+});
 
 //controllers
 App.ContactController = Em.ObjectController.extend({
@@ -83,20 +88,32 @@ App.ContactController = Em.ObjectController.extend({
 App.ContactsNewController = Em.ObjectController.extend({
     actions:{
         save: function(){
-            debugger;
             var nextId = parseInt(App.Contact.FIXTURES.sort(function(a,b) { return parseInt(a.id) > parseInt(b.id); })[App.Contact.FIXTURES.length-1].id) + 1;
-            var contact = this.store.createRecord('contact', {id: nextId, firstName: this.get('firstName')});
+            var contact = this.store.createRecord('contact',
+                {
+                    id: nextId,
+                    firstName: this.get('firstName'),
+                    lastName: this.get('lastName'),
+                    email: this.get('email'),
+                    phone: this.get('phone'),
+                    birthDate: this.get('birthDate')
+                });
             this.transitionToRoute('contact', contact);
         }
-    },
-    firstName: '',
-    id: 0
+    }
 });
 
 App.ContactsController = Em.ArrayController.extend({
     sortProperties: ['fullName']
 });
 
+App.ContactsEditController = Em.ObjectController.extend({
+    actions:{
+        save: function(){
+            this.transitionToRoute('contact', this.model);
+        }
+    }
+});
 //models
 //setup the store.  we are using the fixture adapter for testing
 //other options exist, including the RESTAdapter
