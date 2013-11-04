@@ -72,16 +72,7 @@ App.ContactController = Em.ObjectController.extend({
                 this.transitionToRoute('contacts');
             }
         }
-    },
-    formattedDate: function() {
-        var date = this.get('birthDate');
-
-        if(date)
-            return moment(date).format('MM-DD-YYYY');
-
-        return null;
-
-    }.property('birthDate')
+    }
 });
 
 App.ContactsNewController = Em.ObjectController.extend({
@@ -168,13 +159,16 @@ App.Contact.FIXTURES = [
     }
 ];
 
-
 //Helpers
-/*Ember.HandleBars.registerBoundHelper('date', function(date){
-    return moment(date).format('MMM Do');
-});*/
+Em.Handlebars.registerBoundHelper('parseDate', function(date){
+        if(date instanceof Date){
+            return moment(date).format('MM-DD-YYYY');
+        }
 
-Handlebars.registerHelper("debug", function(optionalValue) {
+        return null;
+});
+
+Em.Handlebars.registerHelper("debug", function(optionalValue) {
     console.log("Current Context");
     console.log("====================");
     console.log(this);
