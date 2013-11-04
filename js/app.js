@@ -40,6 +40,7 @@ App.ContactsRoute = Em.Route.extend({
         return this.store.findAll(App.Contact);
     }
 });
+
 /*
 App.ContactRoute = Em.Route.extend({
     model: function(params){
@@ -138,7 +139,7 @@ App.Contact.FIXTURES = [
     id: 1,
     firstName: 'John',
     lastName: 'Lennon',
-    email: 'biggerThanJesus@contoso.com',
+    email: 'biggerThanJ@contoso.com',
     phone: '555-232-2222',
     birthDate: new Date(1941, 10, 9)
 
@@ -162,7 +163,7 @@ App.Contact.FIXTURES = [
 //Helpers
 Em.Handlebars.registerBoundHelper('parseDate', function(date){
     if(moment(date).isValid()){
-        return moment(date).format('MM-DD-YYYY');
+        return moment(date).fromNow();
     }
 
     return date;
