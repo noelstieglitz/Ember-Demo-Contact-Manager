@@ -161,11 +161,11 @@ App.Contact.FIXTURES = [
 
 //Helpers
 Em.Handlebars.registerBoundHelper('parseDate', function(date){
-        if(date instanceof Date){
-            return moment(date).format('MM-DD-YYYY');
-        }
+    if(moment(date).isValid()){
+        return moment(date).format('MM-DD-YYYY');
+    }
 
-        return null;
+    return date;
 });
 
 Em.Handlebars.registerHelper("debug", function(optionalValue) {
@@ -177,5 +177,34 @@ Em.Handlebars.registerHelper("debug", function(optionalValue) {
         console.log("Value");
         console.log("====================");
         console.log(optionalValue);
+    }
+});
+
+
+//Views
+App.DatePicker = Em.View.extend({
+    tagName: "input",
+    attributeBindings: ['data','value','format','readonly','type','size'],
+    type: "text",
+    format: 'MM-DD-YYYY',
+    data:null,
+    value: function(){
+        var date = this.get('data');
+
+        if(date){
+            return moment(date).format(this.get('format'));
+        }
+        else{
+            return "";
+        }
+    }.property('data'),
+    didInsertElement: function(){
+        var self = this;
+
+        var onChangeDate = function(ev) {
+            self.set('data', ev.date);
+        };
+
+        this.$().datepicker().on('changeDate', onChangeDate);
     }
 });
