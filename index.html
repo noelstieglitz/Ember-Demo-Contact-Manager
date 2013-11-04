@@ -4,7 +4,6 @@
     <title>Ember Contact Manager</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/libs/bootstrap.css" media="screen">
-    <link rel="stylesheet" href="css/libs/bootstrap-theme.css" media="screen">
     <link rel="stylesheet" href="css/libs/datepicker.css" media="screen">
     <link rel="stylesheet" href="css/site.css">
 </head>
@@ -87,7 +86,7 @@
             </div>
             <div class="form-group">
                 <label>Birth Date</label><br/>
-                {{input class="contact-input" type="text" value=birthDate}}
+                {{view App.DatePicker dataBinding="birthDate" format="MM-DD-YYYY"}}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-default">Save</button>
@@ -95,12 +94,6 @@
         </fieldset>
     </div>
     </form>
-    </div>
-</script>
-
-<script type="text/x-handlebars" data-template-name="datepicker" >
-    <div class="input-append date datepicker" data-date-format="yyyy-mm-dd">
-        <input size="16" type="text" readonly><span class="add-on"><i class="icon-th"></i></span>
     </div>
 </script>
 
