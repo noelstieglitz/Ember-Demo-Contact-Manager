@@ -1,28 +1,6 @@
-//Hints for... JSHints
-/*global Em */
-/*global DS */
-/*global console */
-/*global Handlebars */
-/*global confirm */
-
-/*
-Good Ember example:
- Nested routes: http://jsfiddle.net/dWcUp/171/
- CRUD Example: http://www.embersherpa.com/articles/crud-example-app-without-ember-data/
-
- Great blog example vid (source code in links) https://www.youtube.com/watch?v=Ga99hMi7wfY
-
-Helpful websites:
- http://www.embersherpa.com/
-
-*/
 
 var App = Em.Application.create({
-    LOG_TRANSITIONS: true//,
-    //LOG_VIEW_LOOKUPS: true,
-    //LOG_ACTIVE_GENERATION: true,
-    //LOG_TRANSITIONS_INTERNAL: true,
-    //LOG_BINDINGS: true
+    LOG_TRANSITIONS: true
 });
 
 //routers
@@ -41,19 +19,6 @@ App.ContactsRoute = Em.Route.extend({
     }
 });
 
-/*
-App.ContactRoute = Em.Route.extend({
-    model: function(params){
-        return this.store.find(App.Contact, params.contact_id);
-    }
-});
-
-App.ContactsEditRoute = Em.Route.extend({
-    model: function(params){
-        return this.store.find(App.Contact, params.contact_id);
-    }
-});
-*/
 App.ContactsNewRoute = Em.Route.extend({
     model: function(){
         return {id: 0, firstName: '', lastName: '', email: '', phone:'', birthDate:''};
@@ -62,7 +27,6 @@ App.ContactsNewRoute = Em.Route.extend({
 
 //controllers
 App.ContactController = Em.ObjectController.extend({
-    needs: "contact",
     actions: {
         edit: function (params) {
             this.transitionToRoute('contacts.edit', params);
@@ -106,15 +70,10 @@ App.ContactsEditController = Em.ObjectController.extend({
 });
 //models
 
-//setup the store.  we are using the fixture adapter for testing
-//other options exist, including the RESTAdapter
+//Use the fixture adapter
 App.ApplicationAdapter = DS.FixtureAdapter.extend();
 
-/*
-App.Store = DS.Store.extend({
-    adapter: DS.FixtureAdapter.create()
-});
-*/
+
 App.Contact = DS.Model.extend({
     firstName: DS.attr('string'),
     lastName: DS.attr('string'),
@@ -169,6 +128,8 @@ Em.Handlebars.registerBoundHelper('parseDate', function(date){
     return date;
 });
 
+
+//Handlebars helper to help with debugging
 Em.Handlebars.registerHelper("debug", function(optionalValue) {
     console.log("Current Context");
     console.log("====================");
